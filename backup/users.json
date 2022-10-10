@@ -1,0 +1,31 @@
+[{
+  "_id": {
+    "$oid": "61cb6134e6b772502bcb00e4"
+  },
+  "name": "José Miguel",
+  "lastNames": "Carrera Pacheco",
+  "userName": "pacheco",
+  "disable": false,
+  "updated": false,
+  "password": "$2b$10$liilS4sPNGvoa.UgiYAW0O2suv7gHBl8AcO.dTFQ.WGPJUlJ5WRQq",
+  "typeUser": {
+    "$oid": "61c954203d4e629aa12f69ca"
+  },
+  "company": {
+    "$oid": "61c9554f3d4e629aa12f69cd"
+  },
+  "privileges": {
+    "full": true
+  },
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1640718644695"
+    }
+  },
+  "updatedAt": {
+    "$date": {
+      "$numberLong": "1640718644695"
+    }
+  },
+  "__v": 0
+}]

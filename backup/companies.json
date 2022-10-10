@@ -1,0 +1,27 @@
+[{
+  "_id": {
+    "$oid": "61c9554f3d4e629aa12f69cd"
+  },
+  "name": "Test",
+  "createdAt": {
+    "$date": {
+      "$numberLong": "1640498400000"
+    }
+  },
+  "address": {
+    "street": "23 Poniente",
+    "number": {
+      "ext": "3208",
+      "int": ""
+    },
+    "city": "Tehuacán",
+    "state": "Puebla",
+    "country": "México",
+    "geoPoint": {
+      "lat": "-97.413182",
+      "lng": "18.4458359"
+    }
+  },
+  "updated": false,
+  "disable": false
+}]
