@@ -1,7 +1,6 @@
 const express = require('express');
 const response = require('../../network');
 const controller = require('./controller');
-const passportConfig = require('../../passport');
 const Helper = require('../../helpers');
 
 const router = express.Router();
@@ -14,10 +13,6 @@ const router = express.Router();
 
 const addInvoice = function (req, res) {
   const invoice = req.body;
-  const companyId = Helper.getCompanyId(req);
-  const createdBy = Helper.getUserId(req);
-  invoice.company = companyId;
-  invoice.createdBy = createdBy;
   controller
     .addInvoice(invoice)
     .then(data => {
@@ -30,9 +25,8 @@ const addInvoice = function (req, res) {
 
 const lisInvoices = function (req, res) {
   const { invoiceId } = req.params;
-  const companyId = Helper.getCompanyId(req);
   controller
-    .listInvoices(invoiceId, companyId)
+    .listInvoices(invoiceId)
     .then(data => {
       response.success(req, res, data, 200);
     })
@@ -68,10 +62,23 @@ const removeInvoice = function (req, res) {
     });
 };
 
-router.get('/', passportConfig.isAuth, lisInvoices);
-router.get('/:invoiceId', passportConfig.isAuth, lisInvoices);
-router.post('/', passportConfig.isAuth, addInvoice);
-router.patch('/:invoiceId', passportConfig.isAuth, updateInvoice);
-router.delete('/:invoiceId', passportConfig.isAuth, removeInvoice);
+const getImage = function (req, res) {
+  const { path } = req.body;
+  controller
+    .getImage(path, res)
+    .then(data => {
+      response.success(req, res, data, 200);
+    })
+    .catch(err => {
+      response.error(req, res, 'Internal error', 500, err);
+    });
+};
+
+router.get('/', lisInvoices);
+router.post('/image', getImage);
+router.get('/:invoiceId', lisInvoices);
+router.post('/', addInvoice);
+router.patch('/:invoiceId', updateInvoice);
+router.delete('/:invoiceId', removeInvoice);
 
 module.exports = router;

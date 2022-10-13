@@ -1,11 +1,11 @@
 const express = require('express');
-const passport = require('passport');
+// const passport = require('passport');
 const compression = require('compression');
 const cors = require('cors');
 // const { createServer } = require('http');
 // const { Server } = require('socket.io');
 // const { initialSocket } = require('./socketio');
-const { sessionMiddleware } = require('./utils');
+// const { sessionMiddleware } = require('./utils');
 
 const router = require('./routes');
 const db = require('./database');
@@ -39,10 +39,10 @@ app.use(
   express.urlencoded({ limit: '5mb', extended: true, parameterLimit: 1000 }),
 );
 
-app.use(sessionMiddleware);
+// app.use(sessionMiddleware);
 
-app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.initialize());
+// app.use(passport.session());
 
 router(app);
 db();

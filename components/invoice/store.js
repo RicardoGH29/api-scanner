@@ -1,8 +1,9 @@
-const S3 = require('aws-sdk/clients/s3');
+const fs = require("fs");
+const {v4 : uuid} = require('uuid');
 const Model = require('./model');
 
 async function addInvoice(invoice) {
-  const { images } = invoice;
+  const { image, nameOfPC } = invoice;
   const prevInvoice = { ...invoice };
   delete prevInvoice.images;
   const newInvoice = new Model(invoice);
@@ -10,52 +11,30 @@ async function addInvoice(invoice) {
 
   // eslint-disable-next-line no-underscore-dangle
   const id = result._id;
-  const { companyId } = invoice;
 
   const foundInvoice = await Model.findOne({
     _id: id,
   });
 
-  const s3 = new S3({
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-    region: 'us-east-1',
-  });
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const fullDate = `${year}-${month}-${day}`;
 
-  const myBucket = 'invoices';
+  const path = process.cwd()
 
-  const photos = [];
+  const newPath = `${path}/scan/${fullDate}/${nameOfPC}/${uuid()}.jpg`
+  const directoryPath = `${path}/scan/${fullDate}/${nameOfPC}`
 
-  // eslint-disable-next-line no-restricted-syntax
-  for await (const image of images) {
-    const fileName = `company/${companyId}/invoices/${id}/images/${image.name}`;
-
-    const sizeReal = image.images.find(imageSize => imageSize.origin).image;
-
-    const bufferReal = Buffer.from(
-      sizeReal.replace(/^data:image\/\w+;base64,/, ''),
-      'base64',
-    );
-
-    const paramsOfRealImage = {
-      Bucket: myBucket,
-      Key: fileName,
-      Body: bufferReal,
-      ContentEncoding: 'base64',
-      ContentType: 'image/jpeg',
-      // ACL: 'authenticated-read',
-    };
-
-    const realImage = await s3.upload(paramsOfRealImage).promise();
-
-    photos.push({
-      ...realImage,
-      real: true,
-      name: image.name,
-    });
+  if (!fs.existsSync(directoryPath)){
+    await fs.mkdirSync(directoryPath, { recursive: true });
   }
 
-  foundInvoice.photos = photos;
+  const buffer = Buffer.from(image, "base64");
+  await fs.writeFileSync(newPath, buffer);
+
+  foundInvoice.photo = newPath;
 
   await foundInvoice.save();
 
@@ -64,7 +43,7 @@ async function addInvoice(invoice) {
   });
 }
 
-function listInvoices(invoiceId, companyId) {
+function listInvoices(invoiceId) {
   return new Promise((resolve, reject) => {
     let filter = {};
     if (invoiceId) {
@@ -73,12 +52,9 @@ function listInvoices(invoiceId, companyId) {
       };
     }
 
-    filter.company = companyId;
     filter.disable = false;
 
     Model.find(filter)
-      .populate('createdBy')
-      .populate('company')
       .exec((err, populated) => {
         if (err) {
           reject(err);

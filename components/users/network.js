@@ -99,13 +99,13 @@ const removeUser = function (req, res) {
     });
 };
 
-router.get('/', passportConfig.isAuth, listUsers);
-router.get('/profile', passportConfig.isAuth, profile);
-router.get('/:userId', passportConfig.isAuth, listUsers);
+router.get('/', listUsers);
+router.get('/profile', profile);
+router.get('/:userId', listUsers);
 router.post('/', addUser);
 router.post('/login', login);
-router.post('/logout', passportConfig.isAuth, logout);
-router.patch('/:userId', passportConfig.isAuth, updateUser);
-router.delete('/:userId', passportConfig.isAuth, removeUser);
+router.post('/logout', logout);
+router.patch('/:userId', updateUser);
+router.delete('/:userId', removeUser);
 
 module.exports = router;

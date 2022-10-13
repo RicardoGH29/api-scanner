@@ -1,3 +1,4 @@
+const fs = require("fs");
 const store = require('./store');
 
 function addInvoice(invoice) {
@@ -32,9 +33,15 @@ function removeInvoice(invoiceId) {
   return store.remove(invoiceId);
 }
 
+function getImage(path) {
+  const base64 = fs.readFileSync(path, { encoding: 'base64' });
+  return Promise.resolve(base64);
+}
+
 module.exports = {
   addInvoice,
   listInvoices,
   updateInvoice,
   removeInvoice,
+  getImage
 };

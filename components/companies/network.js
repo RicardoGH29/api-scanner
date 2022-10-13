@@ -54,10 +54,10 @@ const removeCompany = function (req, res) {
     });
 };
 
-router.get('/', passportConfig.isAuth, listCompanies);
-router.get('/:companyId', passportConfig.isAuth, listCompanies);
-router.post('/', passportConfig.isAuth, addCompany);
-router.patch('/:companyId', passportConfig.isAuth, updateCompany);
-router.delete('/:companyId', passportConfig.isAuth, removeCompany);
+router.get('/', listCompanies);
+router.get('/:companyId', listCompanies);
+router.post('/', addCompany);
+router.patch('/:companyId', updateCompany);
+router.delete('/:companyId', removeCompany);
 
 module.exports = router;

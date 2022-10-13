@@ -60,10 +60,10 @@ const removeType = function (req, res) {
     });
 };
 
-router.get('/', passportConfig.isAuth, listTypes);
-router.get('/:typeId', passportConfig.isAuth, listTypes);
-router.post('/', passportConfig.isAuth, addType);
-router.patch('/:typeId', passportConfig.isAuth, updateType);
-router.delete('/:typeId', passportConfig.isAuth, removeType);
+router.get('/', listTypes);
+router.get('/:typeId', listTypes);
+router.post('/', addType);
+router.patch('/:typeId', updateType);
+router.delete('/:typeId', removeType);
 
 module.exports = router;
