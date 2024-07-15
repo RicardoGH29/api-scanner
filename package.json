@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
+    "start": "node index.js",
     "deploy": "scp -r ./* root@134.122.29.174:/var/www/scanner-api.pruebasinfo.xyz/html/",
     "lintfix": "eslint src --fix --cache"
   },
